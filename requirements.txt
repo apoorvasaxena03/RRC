@@ -1,4 +1,6 @@
+ipykernel
 pandas
+lxml
 requests
 beautifulsoup4
--e .
+ -e .
