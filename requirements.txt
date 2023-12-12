@@ -2,5 +2,6 @@ ipykernel
 pandas
 lxml
 requests
+grequests
 beautifulsoup4
  -e .
