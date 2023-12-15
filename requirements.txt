@@ -1,7 +1,9 @@
 ipykernel
 pandas
+openpyxl
 lxml
 requests
 grequests
+html5lib
 beautifulsoup4
  -e .
