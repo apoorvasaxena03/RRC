@@ -6,4 +6,5 @@ requests
 grequests
 html5lib
 beautifulsoup4
+pyodbc
  -e .
