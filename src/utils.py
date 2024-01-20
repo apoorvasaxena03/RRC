@@ -1,7 +1,7 @@
 import pyodbc
 
 
-
+# %%
 def connect_to_db(dbname):
     """      
     Parameters
@@ -26,3 +26,4 @@ def connect_to_db(dbname):
     else:
         print(f'Connected to {dbname}!')
         return conn
+# %%
