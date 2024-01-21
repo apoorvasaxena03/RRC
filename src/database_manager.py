@@ -13,10 +13,10 @@ class DatabaseManager:
             num2 (int): accepts an integer value.
         """
         self.driver = '{SQL Server}'
-        self.server='TXDC-LHACNDB01'
-        self.trusted_connection='yes'
+        self.server = 'TXDC-LHACNDB01'
+        self.trusted_connection = 'yes'
 
-    def is_sql_connection_available(self):
+    def sql_is_connected(self,dbname='master'):
         """Function to check if the datbase connection is succesfuly made to master database.
 
         Returns:
@@ -25,19 +25,19 @@ class DatabaseManager:
 
         try:
             conn = pyodbc.connect(
-            driver=self.driver,
-            server=self.server,
-            database = 'master',
-            trusted_connection='yes'
+            driver = self.driver,
+            server = self.server,
+            database = dbname,
+            trusted_connection = self.trusted_connection
             )
             conn.close()
             return True
         
         except pyodbc.Error as e:
-            print(f"Connection not available: {e}")
+            print(f"Connection not available to database {dbname}", e)
             return False
         
-    def connect_to_db(self,dbname):
+    def connect_to_db(self, dbname):
         """Function to connect to Database and return connection.
 
         Args:
@@ -48,13 +48,18 @@ class DatabaseManager:
         """
         try:
             conn = pyodbc.connect(
-            driver=self.driver,
-            server=self.server,
+            driver = self.driver,
+            server = self.server,
             database = dbname,
-            trusted_connection='yes'
+            trusted_connection = self.trusted_connection
             )
         except pyodbc.Error as e:
             print(f"Error returning connection from {dbname}: {e}")
         else:
             print(f'Connected to {dbname}!')
             return conn
+        
+# %%
+# db_manager = DatabaseManager()
+# print(db_manager.sql_is_connected())
+# %%
