@@ -17,7 +17,7 @@ class DatabaseManager:
         self.trusted_connection = 'yes'
 
     def sql_is_connected(self,dbname='master'):
-        """Function to check if the datbase connection is succesfuly made to master database.
+        """Function to check if the datbase connection is succesfuly made to given database.
 
         Returns:
             Bool
