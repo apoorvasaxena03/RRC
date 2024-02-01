@@ -19,6 +19,9 @@ class DatabaseManager:
     def sql_is_connected(self,dbname='master'):
         """Function to check if the datbase connection is succesfuly made to given database.
 
+        Args:
+            dbname (str): defaults database is master.
+
         Returns:
             Bool
         """
