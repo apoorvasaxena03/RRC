@@ -1,8 +1,12 @@
+# %%
 import os
 import logging
+import pandas as pd
 # %%
 class CustomLogger:
-    def __init__(self, logger_name: str, log_dir: str):
+    def __init__(self, file_name:str, logger_name: str, log_dir: str):
+        self.logger_name = logger_name
+        self.file_name = file_name
         self.logger = logging.getLogger(logger_name)
         self.logger.setLevel(logging.DEBUG)
         self.log_dir = log_dir
@@ -11,12 +15,12 @@ class CustomLogger:
 
 
     def _create_file_handler(self):
-        file_name = os.path.basename(__file__).split('.')[0] + ".log"
+        file_name = self.file_name + "_logger.log"
         file_path = os.path.join(self.log_dir, file_name)
         file_handler = logging.FileHandler(file_path, mode='a+', encoding='utf-8')
         file_handler.setLevel(logging.DEBUG)
         formatter = logging.Formatter(
-            fmt = '[%(name)s] %(levelname)s (%(asctime)s): %(message)s (Line: %(lineno)d) [%(filename)s]', datefmt='%m-%d %I:%M %p'
+            fmt = '[%(name)s] %(levelname)s (%(asctime)s): %(message)s (Line: %(lineno)d) [%(filename)s]\n', datefmt='%m-%d %I:%M %p'
             )
         file_handler.setFormatter(formatter)
         self.logger.addHandler(file_handler)
@@ -26,7 +30,7 @@ class CustomLogger:
         stream_handler = logging.StreamHandler()
         stream_handler.setLevel(logging.INFO)
         formatter = logging.Formatter(
-            fmt = '[%(name)s] %(levelname)s (%(asctime)s): %(message)s (Line: %(lineno)d) [%(filename)s]', datefmt='%m-%d %I:%M %p'
+            fmt = '[%(name)s] %(levelname)s (%(asctime)s): %(message)s (Line: %(lineno)d) [%(filename)s]\n', datefmt='%m-%d %I:%M %p'
             )
         stream_handler.setFormatter(formatter)
         self.logger.addHandler(stream_handler)
@@ -36,7 +40,7 @@ class CustomLogger:
         return self.logger
     
     
-    def log_dataframe(df, logger: logging.Logger, name: str = "DataFrame") -> None:
+    def log_dataframe(df:pd.DataFrame, logger:logging.Logger, name:str = "DataFrame") -> None:
 
         logger.debug(
             f'''{name} head:\n {df.head()}\n----------\n''')
@@ -53,7 +57,8 @@ class CustomLogger:
 
 # if __name__ == "__main__":
 #     # Create an instance of CustomLogger with logger name and log directory
-#     logger_instance = CustomLogger("example_logger", "/path/to/log/directory")
+#     logger_instance = CustomLogger("test","example_logger" 
+#                                    ,r"C:\Users\Apoorva.Saxena\OneDrive - Sitio Royalties\Desktop\Project - Apoorva\Python\Scraping\RRC\src\logs")
 
 #     # Get the logger
 #     logger = logger_instance.get_logger()

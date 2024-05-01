@@ -1,45 +1,15 @@
 # %%
 import pyodbc
 import pandas as pd
-from custom_logger import CustomLogger
+from src.custom_logger import CustomLogger
 
 #%%
 # Create an instance of CustomLogger with logger name and log directory
-logger_instance = CustomLogger("DataBase_Utils","src\logs")
+logger_instance = CustomLogger("scraper","DB_Manager", r"C:\Users\Apoorva.Saxena\OneDrive - Sitio Royalties\Desktop\Project - Apoorva\Python\Scraping\RRC\src\logs")
 
 # Get the logger
 logger = logger_instance.get_logger()
 #%%
-class MSSqlConnector:
-    
-    def __init__(self)-> None:
-        self.driver:str = '{SQL Server}'
-        self.server:str = 'TXDC-LHACNDB01'
-        self.trusted_connection:str = 'yes'
-        self.connection = None
-
-    def connect(self, dbname:str = 'master'):
-        # Establish a connection
-        self.connection = pyodbc.connect(
-            driver = self.driver,
-            server = self.server,
-            database = dbname,
-            trusted_connection = self.trusted_connection
-        )
-
-    def execute_query(self, sql_query:str):
-        if self.connection is None:
-            raise Exception("Not connected to SQL Server. Call connect() first.")
-        
-        # Execute the query and fetch the result into a Pandas DataFrame
-        result_df = pd.read_sql(sql_query, self.connection)
-        return result_df
-
-    def close_connection(self):
-        if self.connection is not None:
-            self.connection.close()
-            self.connection = None
-
 class SQLTableManager:
     def __init__(self) -> None:
         self.driver:str = '{SQL Server}'
@@ -47,7 +17,8 @@ class SQLTableManager:
         self.trusted_connection:str = 'yes'
         self.connection = None
 
-    def connect(self, dbname:str = 'master'):
+
+    def connect(self, dbname:str = 'master') -> None:
         # Establish a connection
         self.connection = pyodbc.connect(
             driver = self.driver,
@@ -57,10 +28,22 @@ class SQLTableManager:
         )
         self.cursor = self.connection.cursor()
 
-    def add_rows_from_dataframe(self, sql_table_name, dataframe):
+
+    def execute_query(self, sql_query:str) -> pd.DataFrame:
+        if self.connection is None:
+            raise Exception("Not connected to SQL Server. Call connect() first.")
+        
+        # Execute the query and fetch the result into a Pandas DataFrame
+        result_df = pd.read_sql(sql_query, self.connection)
+        
+        return result_df
+
+
+    def add_rows_from_dataframe(self, sql_table_name:str, dataframe:pd.DataFrame) -> None:
         
         # Convert column names to tuple without apostrophes
         column_tuple = tuple(dataframe.columns)
+        
         # Remove apostrophes from the string representation of the tuple
         column_tuple_str = str(column_tuple).replace("'", "")
 
@@ -75,13 +58,9 @@ class SQLTableManager:
             except Exception as e:
                 logger.error(f"Error adding row to {sql_table_name}: {tuple(row_values)}.")
 
-    def close_connection(self):
+    def close_connection(self) -> None:
         if self.cursor:
             self.cursor.close()
         if self.connection is not None:
             self.connection.close()
             self.connection = None
-# %%
-# db_manager = DatabaseManager()
-# print(db_manager.sql_is_connected())
-# %%
