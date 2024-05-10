@@ -8,7 +8,7 @@ from src.custom_logger import CustomLogger
 logger_instance = CustomLogger("scraper","DB_Manager", r"C:\Users\Apoorva.Saxena\OneDrive - Sitio Royalties\Desktop\Project - Apoorva\Python\Scraping\RRC\src\logs")
 
 # Get the logger
-logger = logger_instance.get_logger()
+db_logger = logger_instance.get_logger()
 #%%
 class SQLTableManager:
     def __init__(self) -> None:
@@ -56,7 +56,7 @@ class SQLTableManager:
                 self.cursor.execute(query, tuple(row_values))
                 self.connection.commit()
             except Exception as e:
-                logger.error(f"Error adding row to {sql_table_name}: {tuple(row_values)}.")
+                db_logger.error(f"Error adding row to {sql_table_name}: {tuple(row_values)}.")
 
     def close_connection(self) -> None:
         if self.cursor:
